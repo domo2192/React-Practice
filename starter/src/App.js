@@ -2,10 +2,14 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import * as BooksAPI from "./BooksAPI"
 import Shelves from "./Shelves.js"
+import {Route, Routes, useNavigate, Link } from 'react-router-dom'
+import Search from "./Search.js"
 
 function App() {
-  const [showSearchPage, setShowSearchpage] = useState(false);
+  const navigate = useNavigate();
   const [books, setBooks] = useState([])
+  const [showSearchPage, setShowSearchpage] = useState(false);
+  const [searchedBooks, setSearchedBooks] = useState([])
 
   useEffect(() => {
     const getBooks = async () => {
@@ -26,40 +30,31 @@ function App() {
 
 
   return (
-    <div className="app">
-      {showSearchPage ? (
-        <div className="search-books">
-          <div className="search-books-bar">
-            <a
-              className="close-search"
-              onClick={() => setShowSearchpage(!showSearchPage)}
-            >
-              Close
-            </a>
-            <div className="search-books-input-wrapper">
-              <input
-                type="text"
-                placeholder="Search by title, author, or ISBN"
+      <div className="app">
+        <Routes>
+
+          <Route 
+            exact path="/" 
+            element={
+              <Shelves 
+                books={books} 
+                onUpdateBook={ (book, shelf) => {updateBook(book, shelf)}}
               />
-            </div>
-          </div>
-          <div className="search-books-results">
-            <ol className="books-grid"></ol>
-          </div>
-        </div>
-      ) : (
-        <div className="list-books">
-          <div className="list-books-title">
-            <h1>MyReads</h1>
-          </div>
-          <Shelves books={books} onUpdateBook={ (book, shelf) => {updateBook(book, shelf)}}/>
-          <div className="open-search">
-            <a onClick={() => setShowSearchpage(!showSearchPage)}>Add a book</a>
-          </div>
-        </div>
-      )}
-    </div>
+            }
+          />
+          <Route 
+            exact path="/search"
+            element={
+              <Search/>
+            }
+          />
+        </Routes>
+        <Link className="open-search" to="/search" searchedBooks={searchedBooks}>
+          <a>Add a book</a>
+        </Link>
+      </div>
   );
 }
+
 
 export default App;
