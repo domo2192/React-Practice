@@ -12,13 +12,18 @@ const Shelves = (({books, onUpdateBook}) => {
     const filteredRead = findRead(books)
 
     return (
-        <div className="list-books-content">
-            <div>
-                <Shelf shelvedBooks={filteredBooks} title={'Current Reading'} onUpdateBook={onUpdateBook}/>
-                <Shelf shelvedBooks={filteredWantToRead} title={'Want to Read'} onUpdateBook={onUpdateBook}/>
-                <Shelf shelvedBooks={filteredRead} title={'Read'} onUpdateBook={onUpdateBook}/>
+        <div className="list-books">
+            <div className="list-books-title">
+            <h1>MyReads</h1>
             </div>
-          </div>
+            <div className="list-books-content">
+                <div>
+                    <Shelf shelvedBooks={filteredBooks} title={'Current Reading'} onUpdateBook={onUpdateBook}/>
+                    <Shelf shelvedBooks={filteredWantToRead} title={'Want to Read'} onUpdateBook={onUpdateBook}/>
+                    <Shelf shelvedBooks={filteredRead} title={'Read'} onUpdateBook={onUpdateBook}/>
+                </div>
+            </div>
+        </div>
     )
 })
 

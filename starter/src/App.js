@@ -2,64 +2,63 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import * as BooksAPI from "./BooksAPI"
 import Shelves from "./Shelves.js"
+import {Route, Routes, useNavigate, Link } from 'react-router-dom'
+import Search from "./Search.js"
 
 function App() {
-  const [showSearchPage, setShowSearchpage] = useState(false);
-  const [books, setBooks] = useState([])
+  const navigate = useNavigate();
+  const [shelvedBooks, setShelevedBooks] = useState([])
 
   useEffect(() => {
     const getBooks = async () => {
       const res = await BooksAPI.getAll();
-      setBooks(res)
+      setShelevedBooks(res)
     }
     getBooks();
-  }, [books])
+  }, [shelvedBooks])
 
   const updateBook = (book, shelf) => {
     const update = async () => {
       const res = await BooksAPI.update(book, shelf)
       console.log(res, "hey response")
-      setBooks(books.concat(res))
+      setShelevedBooks(shelvedBooks.concat(res))
     }
     update();
   }
 
 
   return (
-    <div className="app">
-      {showSearchPage ? (
-        <div className="search-books">
-          <div className="search-books-bar">
-            <a
-              className="close-search"
-              onClick={() => setShowSearchpage(!showSearchPage)}
-            >
-              Close
-            </a>
-            <div className="search-books-input-wrapper">
-              <input
-                type="text"
-                placeholder="Search by title, author, or ISBN"
+      <div className="app">
+        <Routes>
+
+          <Route 
+            exact path="/" 
+            element={
+              <Shelves 
+                books={shelvedBooks} 
+                onUpdateBook={ (book, shelf) => {updateBook(book, shelf)}}
               />
-            </div>
-          </div>
-          <div className="search-books-results">
-            <ol className="books-grid"></ol>
-          </div>
-        </div>
-      ) : (
-        <div className="list-books">
-          <div className="list-books-title">
-            <h1>MyReads</h1>
-          </div>
-          <Shelves books={books} onUpdateBook={ (book, shelf) => {updateBook(book, shelf)}}/>
-          <div className="open-search">
-            <a onClick={() => setShowSearchpage(!showSearchPage)}>Add a book</a>
-          </div>
-        </div>
-      )}
-    </div>
+            }
+          />
+          <Route 
+            exact path="/search"
+            element={
+              <Search 
+                shelvedBooks={shelvedBooks}
+                onUpdateBook={ (book, shelf) => {updateBook(book, shelf)}}
+              />
+            }
+          />
+        </Routes>
+        <Link 
+          className="open-search" 
+          to="/search" 
+        >
+          <a>Add a book</a>
+        </Link>
+      </div>
   );
 }
+
 
 export default App;
