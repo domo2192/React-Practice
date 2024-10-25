@@ -7,23 +7,21 @@ import Search from "./Search.js"
 
 function App() {
   const navigate = useNavigate();
-  const [books, setBooks] = useState([])
-  const [showSearchPage, setShowSearchpage] = useState(false);
-  const [searchedBooks, setSearchedBooks] = useState([])
+  const [shelvedBooks, setShelevedBooks] = useState([])
 
   useEffect(() => {
     const getBooks = async () => {
       const res = await BooksAPI.getAll();
-      setBooks(res)
+      setShelevedBooks(res)
     }
     getBooks();
-  }, [books])
+  }, [shelvedBooks])
 
   const updateBook = (book, shelf) => {
     const update = async () => {
       const res = await BooksAPI.update(book, shelf)
       console.log(res, "hey response")
-      setBooks(books.concat(res))
+      setShelevedBooks(shelvedBooks.concat(res))
     }
     update();
   }
@@ -37,7 +35,7 @@ function App() {
             exact path="/" 
             element={
               <Shelves 
-                books={books} 
+                books={shelvedBooks} 
                 onUpdateBook={ (book, shelf) => {updateBook(book, shelf)}}
               />
             }
@@ -45,11 +43,17 @@ function App() {
           <Route 
             exact path="/search"
             element={
-              <Search/>
+              <Search 
+                shelvedBooks={shelvedBooks}
+                onUpdateBook={ (book, shelf) => {updateBook(book, shelf)}}
+              />
             }
           />
         </Routes>
-        <Link className="open-search" to="/search" searchedBooks={searchedBooks}>
+        <Link 
+          className="open-search" 
+          to="/search" 
+        >
           <a>Add a book</a>
         </Link>
       </div>
