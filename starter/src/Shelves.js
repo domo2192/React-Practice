@@ -1,4 +1,5 @@
 import Shelf from "./Shelf.js"
+import { Link } from 'react-router-dom'
 
 
 const findCurrentReading = ((books) => books.filter(b => b.shelf === 'currentlyReading'))
@@ -23,6 +24,12 @@ const Shelves = (({books, onUpdateBook}) => {
                     <Shelf shelvedBooks={filteredRead} title={'Read'} onUpdateBook={onUpdateBook}/>
                 </div>
             </div>
+            <Link 
+                className="open-search" 
+                to="/search"
+                
+            > Add a book
+            </Link>
         </div>
     )
 })

@@ -1,11 +1,6 @@
+import BookShelfChanger from './BookShelfChanger';
 const Book = ({book, onUpdateBook }) => {
-    const handleUpdate = (book, e) => {
-        e.preventDefault();
-        onUpdateBook(book, e.target.value)
-    }
-
     return (
-        <li key={book.id}>
             <div className="book">
                 <div className="book-top">
                     <div
@@ -17,24 +12,11 @@ const Book = ({book, onUpdateBook }) => {
                         `url(${book.imageLinks?.thumbnail || 'default-image-url.jpg'})` 
                     }}
                     ></div>
-                    <div className="book-shelf-changer">
-                    <select  value={book.shelf || "none"} onChange={(e) => handleUpdate(book, e)}>
-                        <option value="none" disabled>
-                        Move to...
-                        </option>
-                        <option value="currentlyReading">
-                        Currently Reading
-                        </option>
-                        <option value="wantToRead">Want to Read</option>
-                        <option value="read">Read</option>
-                        <option value="none">None</option>
-                    </select>
-                    </div>
+                   <BookShelfChanger book={book} onUpdateBook={onUpdateBook} />
                 </div>
                 <div className="book-title">{book.title}</div>
                 <div className="book-authors">{book.authors}</div>
             </div>
-        </li>
     )
 
 }
